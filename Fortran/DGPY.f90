@@ -13,13 +13,13 @@ CHARACTER (LEN=*), PARAMETER, PRIVATE :: CHMDL="DGPY"
 
 INTEGER,                      PROTECTED :: KNL   =50     ! НОМЕР КАНАЛА ВЫВОДА ДАННЫХ
 CHARACTER (LEN=2),            PRIVATE   :: CHKNL ="50"   ! НОМЕР КАНАЛА ВЫВОДА ДАННЫХ
-CHARACTER (LEN=3),            PRIVATE   :: CHFT  ="jpg"  ! ТИП ФАЙЛА РИСУНКА
+CHARACTER (LEN=3),            PRIVATE   :: CHFT  ="svg"  ! ТИП ФАЙЛА РИСУНКА
 INTEGER,                      PRIVATE   :: NCLR  =0      ! ФЛАГ ЦВЕТА
 CHARACTER (LEN=*), PARAMETER, PRIVATE   :: CHDATA="#***" ! ИДЕНТИФИКАТОР БЛОКА ЧИСЛОВЫХ ДАННЫХ
-CHARACTER (LEN=*), PARAMETER, PRIVATE   :: PYTHON='python '
-CHARACTER (LEN=*), PARAMETER, PRIVATE   :: GFORT1='"D:\Eclipse\Workspace\WSPython\STA2BS\Source\gfort1.py"'
-CHARACTER (LEN=*), PARAMETER, PRIVATE   :: GFORT2='"D:\Eclipse\Workspace\WSPython\STA2BS\Source\gfort2.py"'
-CHARACTER (LEN=*), PARAMETER, PRIVATE   :: GFORT3='"D:\Eclipse\Workspace\WSPython\STA2BS\Source\gfort3.py"'
+CHARACTER (LEN=*), PARAMETER, PRIVATE   :: PYTHON='python3 '
+CHARACTER (LEN=*), PARAMETER, PRIVATE   :: GFORT1='F:\STA2BS\Python\gfort1.py'
+CHARACTER (LEN=*), PARAMETER, PRIVATE   :: GFORT2='F:\STA2BS\Python\gfort2.py'
+CHARACTER (LEN=*), PARAMETER, PRIVATE   :: GFORT3='F:\STA2BS\Python\gfort3.py'
 
 !**********************************************************************
 
@@ -54,6 +54,17 @@ CHARACTER (LEN=*), PARAMETER :: CHSUB ="DGPYRS"
 CHARACTER (LEN=*), PARAMETER :: CHERR1=CHERR0//CHSUB//" МОДУЛЯ "//CHMDL
 
 ! ТИП ФАЙЛА РИСУНКА
+! MATPLOTLIB 3.1.2-1ubuntu4
+! 'ps'  : 'Postscript'
+! 'eps' : 'Encapsulated Postscript'
+! 'pdf' : 'Portable Document Format'
+! 'pgf' : 'PGF code for LaTeX'
+! 'png' : 'Portable Network Graphics'
+! 'raw' : 'Raw RGBA bitmap'
+! 'rgba': 'Raw RGBA bitmap'
+! 'svg' : 'Scalable Vector Graphics'
+! 'svgz': 'Scalable Vector Graphics'
+
 IF ( PRESENT(CHFTYP) ) THEN
    SELECT CASE(CHFTYP)
 
@@ -118,6 +129,8 @@ SUBROUTINE DGPY11 (FLNAME, & ! ИМЯ ФАЙЛОВ ДАННЫХ И РИСУНК�
                    X2,     & ! RIGHT  ГРАНИЦА ДИАПАЗОНА ИЗМЕНЕНИЯ ПЕРЕМЕННОЙ X
                    Y1,     & ! BOTTOM ГРАНИЦА ДИАПАЗОНА ИЗМЕНЕНИЯ ПЕРЕМЕННОЙ Y
                    Y2,     & ! TOP    ГРАНИЦА ДИАПАЗОНА ИЗМЕНЕНИЯ ПЕРЕМЕННОЙ Y
+                   YLIM1,  & ! BOTTOM ГРАНИЦА ПЕРЕМЕННОЙ Y НА ГРАФИКЕ
+                   YLIM2,  & ! TOP    ГРАНИЦА ПЕРЕМЕННОЙ Y НА ГРАФИКЕ
                    INTX,   & ! XINTEGER ЦЕЛЫЕ ЗНАЧЕНИЯ ПЕРЕМЕННОЙ X
                    LEGEND)   ! LEGEND ДЛЯ ПЕРВОЙ КРИВОЙ НА ГРАФИКЕ
 
@@ -137,6 +150,8 @@ REAL,              INTENT (IN), OPTIONAL :: X1     ! LEFT   ГРАНИЦА ДИ�
 REAL,              INTENT (IN), OPTIONAL :: X2     ! RIGHT  ГРАНИЦА ДИАПАЗОНА ИЗМЕНЕНИЯ ПЕРЕМЕННОЙ X
 REAL,              INTENT (IN), OPTIONAL :: Y1     ! BOTTOM ГРАНИЦА ДИАПАЗОНА ИЗМЕНЕНИЯ ПЕРЕМЕННОЙ Y
 REAL,              INTENT (IN), OPTIONAL :: Y2     ! TOP    ГРАНИЦА ДИАПАЗОНА ИЗМЕНЕНИЯ ПЕРЕМЕННОЙ Y
+REAL,              INTENT (IN), OPTIONAL :: YLIM1  ! BOTTOM ГРАНИЦА ПЕРЕМЕННОЙ Y НА ГРАФИКЕ
+REAL,              INTENT (IN), OPTIONAL :: YLIM2  ! TOP    ГРАНИЦА ПЕРЕМЕННОЙ Y НА ГРАФИКЕ
 INTEGER,           INTENT (IN), OPTIONAL :: INTX   ! XINTEGER ЦЕЛЫЕ ЗНАЧЕНИЯ ПЕРЕМЕННОЙ X
 CHARACTER (LEN=*), INTENT (IN), OPTIONAL :: LEGEND ! LEGEND ДЛЯ ПЕРВОЙ КРИВОЙ НА ГРАФИКЕ
 
@@ -222,6 +237,16 @@ END IF
 ! TOP ГРАНИЦА ДИАПАЗОНА ИЗМЕНЕНИЯ ПЕРЕМЕННОЙ Y
 IF ( PRESENT(Y2) ) THEN
     WRITE (KNL,'(A,E12.6)') "YTOP ", Y2
+END IF
+
+! BOTTOM ГРАНИЦА ПЕРЕМЕННОЙ Y НА ГРАФИКЕ
+IF ( PRESENT(YLIM1) ) THEN
+    WRITE (KNL,'(A,E12.6)') "YLIM1 ", YLIM1
+END IF
+
+! TOP ГРАНИЦА ПЕРЕМЕННОЙ Y НА ГРАФИКЕ
+IF ( PRESENT(YLIM2) ) THEN
+    WRITE (KNL,'(A,E12.6)') "YLIM2 ", YLIM2
 END IF
 
 ! ЦЕЛЫЕ ЗНАЧЕНИЯ ПЕРЕМЕННОЙ X
