@@ -264,6 +264,55 @@ experiment_num = 0 #corresponds to a database type
 subexp_num = 1 # corresponds to a ANN for certain experiment
 do_log = 0 #log results or not
 
+# if do_log:
+#     directory_name = r"~/STA2BS_Experiments/Forward/Experiment" + str(experiment_num)
+    
+#     if not os.path.exists(directory_name):
+#         os.makedirs(directory_name)
+    
+#     logfile_name = directory_name + "/Experiment" + str(experiment_num) + ".txt"
+#     logfile = open(logfile_name, "a")
+
+#     logfile.write("\n  " + str(subexp_num) + ")\n")
+
+#     logfile.write("\tEpochs: " + str(epochs) + "\n\n")
+
+#     logfile.write("\tANN topology: [")
+#     for item1 in lstlrs:
+#         logfile.write("[")
+#         for item2 in item1:
+#             logfile.write("%s," % item2)
+#         logfile.write("],")
+#     logfile.write("]\n\n")
+    
+#     logfile.write("\tOptimizer: " + optimizer + "\n\n")
+    
+#     logfile.write("\tUpper bound: " + str(eps_1) + "\n")
+#     logfile.write("\tLower bound: " + str(eps_2) + "\n\n")
+
+#     logfile.write("\tsize(x_train)       = " + str(x_train.shape) + "\n")
+#     logfile.write("\tsize(x_val_inside)  = " + str(x_val_inside.shape) + "\n")
+#     logfile.write("\tsize(x_val_outside) = " + str(x_val_outside.shape) + "\n\n")
+
+#     logfile.write("\tAverage val_inside loss during train: " + str(val_in_avg_loss) + "\n")
+#     logfile.write("\tAverage val_outside loss during train: " + str(val_out_avg_loss) + "\n")
+#     logfile.write("\tAverage Out / In ratio during train: %.2f" % float(val_out_avg_loss/val_in_avg_loss) + "\n\n")
+
+#     logfile.write("\tval_inside loss after train: " + str(val_in_loss) + "\n")
+#     logfile.write("\tval_outside loss after train: " + str(val_out_loss) + "\n")
+#     logfile.write("\tOut / In ratio after train: %.2f" % float(val_out_loss/val_in_loss) + "\n\n")
+
+#     logfile.close()
+
+#     loss_image_name = "/Experiment" + str(experiment_num) + "." + str(subexp_num) + "_loss.png"
+#     shutil.copy("loss.png", directory_name + loss_image_name)
+    
+#     if db.dbch.shape[1] == 2 or db.dbch.shape[1] == 3:
+#         points_image_name = "/Experiment" + str(experiment_num) + "." + str(subexp_num) + "_points.png"
+#         shutil.copy("points.png", directory_name + points_image_name)
+
+#     print('Logged output into file "Experiment' + str(experiment_num) + '.txt"')
+
 #log results
 # if do_log:
 #     directory_name = r"~/STA2BS_Experiments/Forward/Experiment" + str(experiment_num)
