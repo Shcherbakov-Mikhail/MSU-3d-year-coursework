@@ -20,6 +20,9 @@ CHARACTER (LEN=*), PARAMETER, PRIVATE   :: PYTHON='python3 '
 CHARACTER (LEN=*), PARAMETER, PRIVATE   :: GFORT1='F:\STA2BS\Python\gfort1.py'
 CHARACTER (LEN=*), PARAMETER, PRIVATE   :: GFORT2='F:\STA2BS\Python\gfort2.py'
 CHARACTER (LEN=*), PARAMETER, PRIVATE   :: GFORT3='F:\STA2BS\Python\gfort3.py'
+!CHARACTER (LEN=*), PARAMETER, PRIVATE   :: GFORT1='/Users/Misha/STA2BS_source/Python/gfort1.py'
+!CHARACTER (LEN=*), PARAMETER, PRIVATE   :: GFORT2='/Users/Misha/STA2BS_source/Python/gfort2.py'
+!CHARACTER (LEN=*), PARAMETER, PRIVATE   :: GFORT3='/Users/Misha/STA2BS_source/Python/gfort3.py'
 
 !**********************************************************************
 
