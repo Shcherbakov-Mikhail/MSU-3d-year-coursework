@@ -36,6 +36,7 @@ flpy3 = open(r"pyfem.3", mode='wt')
 
 # FORTRAN-программа
 fprg = r"D:\Eclipse\Workspace\WSFortran\STA2BS\Release\STA2BS"
+# fprg = r"~/EclipseWS/FortranWS/STA2BS/Release/STA2BS"
 
 #************************************************
 # файл параметров FORTRAN-программы
