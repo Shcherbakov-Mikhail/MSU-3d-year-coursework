@@ -25,6 +25,7 @@ flpy3 = open(r"pych.3", mode='wt')
 
 # FORTRAN-программа
 fprg = r"D:\Eclipse\Workspace\WSFortran\CHL1\Release\CHL1"
+# fprg = r"~/EclipseWS/FortranWS/CHL1/Release/CHL1"
 
 #************************************************
 
