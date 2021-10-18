@@ -2,8 +2,6 @@
 # coding=UTF-8
 '''
 Created on 06 марта 2019 г.
-@author: alex
-
 построение 1D-plot функций y=f(x)
 '''
 
