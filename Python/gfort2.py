@@ -2,8 +2,6 @@
 # coding=UTF-8
 '''
 Created on 07 декабря 2019 г.
-@author: alex
-
 построение 2D-image функций z=f(x,y) в прямоугольной области
 '''
 
