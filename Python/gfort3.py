@@ -2,7 +2,6 @@
 # coding=UTF-8
 '''
 Created on 12 декабря 2019 г.
-@author: alex
 
 построение 3D-surface_plot функций z=f(x,y) в прямоугольной области
 '''
