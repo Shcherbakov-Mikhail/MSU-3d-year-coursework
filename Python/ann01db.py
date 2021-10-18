@@ -87,7 +87,6 @@ cherr = "\nВЫПОЛНЕНИЕ модуля ann01db ПРЕРВАНО"
 #************************************************
 
 batch_size = 64
-val_split_ratio = (1,1)
 
 #************************************************
 
@@ -171,7 +170,7 @@ def wdbfem1(nsdb,  # количество образцов
 
 def rdbann1(): # ввод БД для ANN
 
-    global dbpr #  input ANN - БД обобщенных узловых перемещений
+    global dbpr # input ANN - БД обобщенных узловых перемещений
     global dbmt # output ANN - БД жесткостей КЭ
     global dbrq # output ANN - БД распределенной нагрузки
     global dbxe # output ANN - БД (координата дефекта, величина дефекта)
@@ -293,8 +292,8 @@ def wdbch1(): # запись в файлы БД CONVEX HULL & TESTING SAMPLES
 
 def rdbch1(): # ввод БД расстояний & коэффициентов разложения
 
-    global dbch 
-    global dbts
+    global dbch #  input ANN - БД Convex Hull
+    global dbts #  input ANN - БД Training Samples
     global dbds #  input ANN - БД расстояний
     global dbec #  input ANN - БД коэффициентов разложения
     global dbep #  input ANN - БД проекций на CONVEX HULL
@@ -316,5 +315,4 @@ def rdbch1(): # ввод БД расстояний & коэффициентов 
     flpy3.write("размерность input vector - {0:d}\n".format(dbec.shape[1]))
     
     dbch = np.loadtxt(fldbch, skiprows=1)
-    
     dbts = np.loadtxt(fldbts, skiprows=1)

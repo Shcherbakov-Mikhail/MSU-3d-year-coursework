@@ -9,14 +9,11 @@ Created on 10 апр. 2021 г.
 
 import sys, os
 import numpy as np
-
 import matplotlib.pyplot as plt
+import ann01db  as db  # имена файлов данных
 
 if __name__ == '__main__':
     pass
-
-
-import ann01db  as db  # имена файлов данных
 
 cherr = "\nВЫПОЛНЕНИЕ модуля ann01ch ПРЕРВАНО"
 
@@ -25,20 +22,18 @@ flpy3 = open(r"pych.3", mode='wt')
 
 # FORTRAN-программа
 fprg = r"D:\Eclipse\Workspace\WSFortran\CHL1\Release\CHL1"
-# fprg = r"~/EclipseWS/FortranWS/CHL1/Release/CHL1"
 
 #************************************************
 
 # ввод БД ANN
 db.rdbann1()  
 
-nsdb = db.dbrq.shape[0] # количество образцов БД жесткостей КЭ
+nsdb = db.dbrq.shape[0] # количество образцов БД
 
 #************************************************
 
-nsch = 2*db.dbrq.shape[1] # количество образцов БД CONVEX HULL
-
-db.dbch = db.dbrq[:nsch,:] # БД CONVEX HULL
+nsch    = 2*db.dbrq.shape[1] # количество образцов БД CONVEX HULL
+db.dbch = db.dbrq[:nsch,:] # БД CONVEX HULL 
 db.dbts = db.dbrq[nsch:,:] # БД TESTING SAMPLES
 
 # запись в файлы БД CONVEX HULL & TESTING SAMPLES
@@ -76,7 +71,6 @@ flpy3.write(db.fldbep.lstrip("fort.") + " - номер канала вывода
 
 # вызов FORTRAN-программы
 ierr = os.system(fprg)
-#     os.rename("fort.3", "fortch.3") 
 
 #************************************************
 

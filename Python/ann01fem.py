@@ -18,17 +18,12 @@ Created on 12 ноября 2020 г.
 
 import sys, os
 import numpy as np
+import matplotlib.pyplot as plt
+import ann01db as db # имена файлов данных и запись БД для FEM
 
 from numpy.random import default_rng
-from scipy.spatial.distance import cdist, euclidean
-
-
 import random
 random.seed(1)
-
-import matplotlib.pyplot as plt
-
-import ann01db as db # имена файлов данных и запись БД для FEM
 
 cherr = "\nВЫПОЛНЕНИЕ модуля ann01fem ПРЕРВАНО"
 # log-файл сообщений о работе программы
@@ -36,7 +31,6 @@ flpy3 = open(r"pyfem.3", mode='wt')
 
 # FORTRAN-программа
 fprg = r"D:\Eclipse\Workspace\WSFortran\STA2BS\Release\STA2BS"
-# fprg = r"~/EclipseWS/FortranWS/STA2BS/Release/STA2BS"
 
 #************************************************
 # файл параметров FORTRAN-программы
@@ -54,9 +48,9 @@ xl_fort = 1.0 # длина балки
 fl = open(db.flfort, mode='wt')
 
 # запись в файл номеров каналов ввода-вывода FORTRAN-программы 
-fl.write(db.fldbmt.lstrip("fort.") + " "   # номер канала  ввода БД жесткостей КЭ
-        +db.fldbrq.lstrip("fort.") + " "   # номер канала  ввода БД распределенной нагрузки
-        +db.fldbpr.lstrip("fort.") + '\n') # номер канала вывода БД обобщенных узловых перемещений
+fl.write(db.fldbmt.lstrip("fort.") + " "   # номер канала  ввода  БД жесткостей КЭ
+        +db.fldbrq.lstrip("fort.") + " "   # номер канала  ввода  БД распределенной нагрузки
+        +db.fldbpr.lstrip("fort.") + '\n') # номер канала  вывода БД обобщенных узловых перемещений
 
 # запись в файл параметр типа граничных условий и длины балки
 fl.write("{0:d} {1:E}".format(ib_fort, xl_fort))
@@ -81,9 +75,8 @@ flpy3.write("{0:E} - длина балки\n".format(xl_fort))
 #************************************************
 
 # параметры БД ANN
-ne   = 20         # количество КЭ
-# nsdb = 30*db.batch_size # количество образцов  
-nsdb = 1000
+ne   = 20   # количество КЭ
+nsdb = 1000 # количество образцов  
 
 # запись в log-файл параметров БД
 flpy3.write("\nПАРАМЕТРЫ БД жесткостей КЭ и распределенной нагрузки\n")
@@ -159,6 +152,7 @@ ax.plot(x1, y1, 'k.')
 # сохранение файла рисунка
 fldd = "dd"  # имя выходного файла рисунка
 plt.savefig(fldd) 
+plt.close()
 
 #************************************************
 
@@ -181,6 +175,7 @@ ax.plot(x2+1.0, y2, 'k.')
 # сохранение файла рисунка
 flde = "de"  # имя выходного файла рисунка
 plt.savefig(flde) 
+plt.close()
 
 #************************************************
 
@@ -197,71 +192,62 @@ def generate_val_set(ch, amount, bounds, norm_val):
     return np.array(val_set)
 
 
-# БД распределенной нагрузки (output vector-2 ANN)
-db.dbrq = np.zeros((nsdb,ne)) # инициализация
-
+# инициализация БД распределенной нагрузки
+db.dbrq = np.zeros((nsdb,ne))
 u_bound = 1.5
 l_bound = 0.5
-in_out_ratio = db.val_split_ratio
 
-# формирование БД распределенной нагрузки (output vector-2 ANN)
-#формирование БД CONVEX HULL
-for lsdb in range(ne*2):            
-    #axes (ne)-dimentional rectanle 
-        if lsdb < ne:
-            db.dbrq[lsdb,lsdb] =  l_bound
-        else:
-            db.dbrq[lsdb,lsdb-ne*2] =  u_bound 
-    
-#формирование БД TESTING SAMPLES   
+# формирование БД распределенной нагрузки
+# формирование БД CONVEX HULL
+
 val_data_size = nsdb-ne*2
-val_in_size = int(val_data_size * in_out_ratio[0] / sum(list(in_out_ratio))) 
+val_in_size = int(val_data_size/2) 
 val_out_size = val_data_size - val_in_size
-    
-# Create a ne-dim square
-# for lsdb in range(ne*2, nsdb): 
-#     for el in range(ne):
-#         db.dbrq[lsdb,el] =  random.uniform(0, u_bound)
-         
+
+# задаём вершины многоугольника  
+for lsdb in range(ne*2):         
+    if lsdb < ne:
+        db.dbrq[lsdb,lsdb] =  l_bound
+    else:
+        db.dbrq[lsdb,lsdb-ne*2] =  u_bound
+        
+# задаём точки внутри и снаружи многоугольника
 arr_in = generate_val_set(
     db.dbrq[:ne*2], 
     amount=val_in_size, 
     bounds=(0,1), 
     norm_val=1)
- 
+    
 arr_out = generate_val_set(
     db.dbrq[:ne*2], 
     amount=val_out_size,
     bounds=(0,1), 
-    norm_val=0.3)   
- 
+    norm_val=5)   
+    
 db.dbrq[ne*2 : (val_in_size + ne*2)] = arr_in
-db.dbrq[(val_in_size + ne*2) :] = arr_out
+db.dbrq[(val_in_size + ne*2) : ] = arr_out
+    
+# задаём точки внутри многоугольника
+# for lsdb in range(ne*2, nsdb): 
+#     for el in range(ne):
+#         db.dbrq[lsdb,el] =  random.uniform(0, u_bound)
+
+#plt.scatter(db.dbrq[:,0], db.dbrq[:,1])
+#plt.show()
 
 #************************************************
 # запись БД в файлы
 db.wdbfem1(nsdb, # количество образцов
            ne)   # количество КЭ
-             
-
-#          dbxe, # БД (координата дефекта, величина дефекта)
-#          dbne, # БД (номер КЭ, величина дефекта)
-#          dbmt, # БД жесткостей КЭ  
-#          dbrq) # БД распределенной нагрузки
 
 #************************************************
-
-#sys.exit()
 
 # вызов FORTRAN-программы
 ierr = os.system(fprg)
-#os.rename("fort.3", "fortfem.3")
 
 #************************************************
 
-# ввод БД обобщенных узловых перемещений dbpr[dim0,dim1]
-# dim0 - количество образцов
-# dim1 - количество параметров
+# ввод БД обобщенных узловых перемещений
 dbheader = np.loadtxt(db.fldbpr, max_rows=1, dtype=int) # заголовок БД
 db.dbpr  = np.loadtxt(db.fldbpr, skiprows=1)            # input vector ANN
 
